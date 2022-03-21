@@ -4,23 +4,25 @@ const objId = mongoose.Schema.Types.ObjectId
 const blogModel = new mongoose.Schema({
     title: {
         type: String,
-        required: true
+        required: "Title is required",
+        trim : true 
     },
     body: {
         type: mongoose.Schema.Types.Mixed,
-        required: true
+        required: "Body id required",
     },
     authorId: {
         type: objId,
-        required: true,
+        required: "Blog author is required",
         ref: "blogProject_author"
     },
     tags: { type: [String] },
     category: {
         type: [String],
-        required: true
+        required: "Category is required",
+        trim : true
     },
-    subcategory: { type: [String] },
+    subcategory: { type: [String] ,trim : true },
     deletedAt: { type: Date },
     isDeleted: { type: Boolean, default: false },
     publishedAt: { type: Date },

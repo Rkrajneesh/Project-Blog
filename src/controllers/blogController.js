@@ -3,6 +3,14 @@ const BlogModel = require("../models/blogModel")
 const AuthorModel = require("../models/authorModel")
 
 
+const isValid= function(value){
+    if(typeof (value) === undefined || typeof (value) === null) {return false}
+   // if(typeof (value).trim().length==0) {return false}
+    if(typeof (value) === "string" && (value).trim().length>0) {return true}
+
+}
+
+
 const createBlog = async function (req, res) {
     try {
         let data = req.body
@@ -11,6 +19,12 @@ const createBlog = async function (req, res) {
         if (Object.keys(data) == 0)
             // returning 400 {bad request data is empty}
             return res.status(400).send({ status: false, msg: "Bad request. Content to post missing" })
+
+            const {title , body , authorId, category}= data
+            if (!isValid(title)) { return res.status(400).send({ status: false, msg: "Title is required" }) }
+            if (!isValid(body)) { return res.status(400).send({ status: false, msg: "Body is required" }) }
+            if (!isValid(authorId)) { return res.status(400).send({ status: false, msg: "Author id is required" }) }
+            if (!isValid(category)) { return res.status(400).send({ status: false, msg: "Category is required" }) }
 
         let idMatch = await AuthorModel.findById(id)
         // id match in author model, if not
@@ -74,7 +88,7 @@ const updateBlog = async function (req, res) {
                 }
             }, { new: true })
         //Sending the updated response
-        console.log(updatedBlog)
+       // console.log(updatedBlog)
         res.status(200).send({ status: true, data: updatedBlog })
     }
     catch (err) {
